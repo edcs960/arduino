@@ -1,0 +1,186 @@
+#include <Bounce2.h>
+int Gawi_LED_pin = 11;
+int Bawi_LED_pin = 10;
+int Bo_LED_pin = 9;
+int init_BUTTON_pin = 5;
+int Gawi_BUTTON_pin = 4;
+int Bawi_BUTTON_pin = 3;
+int Bo_BUTTON_pin = 2;
+
+int user_value = 0;
+int LED_stop = 0;
+
+int led_counter = 0;
+int modulus = 3;
+int debounce_time = 10;
+
+int game_result = 0;
+int decision_counter = 0;
+
+Bounce bouncer_init = Bounce();
+Bounce bouncer_Gawi = Bounce();
+Bounce bouncer_Bawi = Bounce();
+Bounce bouncer_Bo = Bounce();
+
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(Gawi_LED_pin,OUTPUT);
+  pinMode(Bawi_LED_pin,OUTPUT);
+  pinMode(Bo_LED_pin,OUTPUT);
+  pinMode(init_BUTTON_pin,INPUT);
+  pinMode(Gawi_BUTTON_pin,INPUT);
+  pinMode(Bawi_BUTTON_pin,INPUT);
+  pinMode(Bo_BUTTON_pin,INPUT);
+
+  bouncer_init.attach(init_BUTTON_pin);
+  bouncer_init.interval(debounce_time);
+
+  bouncer_Gawi.attach(Gawi_BUTTON_pin);
+  bouncer_Gawi.interval(debounce_time);
+
+  bouncer_Bawi.attach(Bawi_BUTTON_pin);
+  bouncer_Bawi.interval(debounce_time);
+
+  bouncer_Bo.attach(Bo_BUTTON_pin);
+  bouncer_Bo.interval(debounce_time);
+}
+
+void loop()
+{
+ bouncer_init.update();
+ bouncer_Gawi.update();
+ bouncer_Bawi.update();
+ bouncer_Bo.update();
+
+ if(bouncer_init.rose())
+ {
+  Serial.println("==========Init Button : pressed ==========");
+    LED_stop = 0;
+    user_value = 0;
+    decision_counter = 0;
+  }
+  else if(LED_stop == 0 && bouncer_Gawi.rose() == HIGH)
+  {
+    Serial.println("==========Gawi Button : pressed ==========");
+    LED_stop = 1;
+    user_value = 1;
+  }
+  else if(LED_stop == 0 && bouncer_Bawi.rose() == HIGH)
+  {
+    Serial.println("==========Bawi Button : pressed ==========");
+    LED_stop = 1;
+    user_value = 2;
+  }
+   else if(LED_stop == 0 && bouncer_Bo.rose() == HIGH)
+  {
+    Serial.println("==========Bo Button : pressed ==========");
+    LED_stop = 1;
+    user_value = 3;
+  }
+  else if(LED_stop == 0)
+  {
+    LED_stop = 0;
+    led_counter = (led_counter + 1) % 3;
+    display_LED(led_counter);
+    user_value = 0;
+  }
+  else 
+  {
+    decision_counter ++;
+  }
+
+  if(LED_stop == 1)
+  {
+    if(decision_counter == 0)
+    {
+      Serial.print("========== Gawi-Bawi-Bo Game Result ==========");
+      Serial.println();
+    }
+
+    if((user_value-1) == 0)
+    {
+      if(led_counter == 2)
+        game_result = 1;
+      else if(led_counter == 1)
+        game_result = 2;
+      else
+        game_result = 0;
+    }
+    else if((user_value-1) == 1)
+    {
+      if(led_counter == 0)
+        game_result = 1;
+      else if(led_counter == 2)
+        game_result = 2;
+      else
+        game_result = 0;
+    }
+    else if((user_value-1) == 2)
+    {
+      if(led_counter == 1)
+        game_result = 1;
+      else if(led_counter == 0)
+        game_result = 2;
+      else
+        game_result = 0;
+    }
+    else
+    {
+      Serial.println("========== No Key : Wrong (Stop condition) ^^^^^^^^^^");
+    }
+
+    if(decision_counter == 0)
+    {
+      if(game_result == 0)
+        Serial.println("========== You and Computer : Tie Result : ==========");
+      else if(game_result == 1)
+      {
+        Serial.println("========== You are winner !!! ==========");
+      }
+      else if(game_result == 2)
+      {
+        Serial.println("========== You are loser ==========");
+      }
+      else
+      {
+        Serial.println("========== Wrong Result !!! ==========");
+      }
+    }
+  }
+  else
+  {
+    if(millis() % 10000 < 20)
+    {
+      Serial.println("========== Game is Running !!! ==========");
+    }
+  }
+}
+
+void display_LED(int counter)
+{
+  if(counter == 0)
+  {
+    digitalWrite(Gawi_LED_pin,HIGH);
+    digitalWrite(Bawi_LED_pin,LOW);
+    digitalWrite(Bo_LED_pin,LOW);
+  }
+  else if(counter == 1)
+  {
+    digitalWrite(Gawi_LED_pin,LOW);
+    digitalWrite(Bawi_LED_pin,HIGH);
+    digitalWrite(Bo_LED_pin,LOW);
+  }
+  else if(counter == 2)
+  {
+    digitalWrite(Gawi_LED_pin,LOW);
+    digitalWrite(Bawi_LED_pin,LOW);
+    digitalWrite(Bo_LED_pin,HIGH);
+  }
+  else
+  {
+    digitalWrite(Gawi_LED_pin,LOW);
+    digitalWrite(Bawi_LED_pin,LOW);
+    digitalWrite(Bo_LED_pin,LOW);
+  }
+}
