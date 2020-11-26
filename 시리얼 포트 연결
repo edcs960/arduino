@@ -1,0 +1,113 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO.Ports;
+using System.IO;
+using System.Management;
+
+namespace 아두이노_연결_연습
+{
+    public partial class Form1 : Form
+    {
+        private List<string> ComName = new List<string>();
+        private string LastData = "";
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (ComName[SerialListBox.SelectedIndex] == "")
+            {
+            }
+            else 
+            {
+                if (sp != null && sp.IsOpen) 
+                {
+                    sp.Close();
+                    textBox1.AppendText(sp.PortName + " Discunnect \r\n");
+                    SaveFile();
+                }
+                PortOpen(ComName[SerialListBox.SelectedIndex], 9600);
+                textBox1.AppendText(SerialListBox.Text + " Connect");
+            }
+        }
+
+        private void PortOpen(string comport, int baudrate) 
+        {
+            CheckForIllegalCrossThreadCalls = false;
+            sp = new SerialPort(comport, baudrate);
+            sp.PortName = comport;
+            sp.BaudRate = baudrate;
+            sp.DataBits = 8;
+            sp.Parity = Parity.None;
+            sp.StopBits = StopBits.One;
+            sp.Open();
+            if (LastData != "") 
+            {
+                sp.Write(LastData);
+            }
+            sp.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
+        }
+
+        private void Form1_FormClosed(object sender, FormClosingEventArgs e) 
+        {
+            SaveFile();
+            if (sp != null && sp.IsOpen)
+                sp.Close();
+        }
+
+        private void SaveFile() 
+        {
+            FileStream fs = File.Open(@"data.bin", FileMode.Create);
+            using (BinaryWriter wr = new BinaryWriter(fs)) 
+            {
+                wr.Write(LastData);
+            }
+        }
+
+        private void LoadFile() 
+        {
+            using (BinaryReader br = new BinaryReader(File.Open(@"data.bin", FileMode.Open))) 
+            {
+                LastData = br.ReadString();
+            }
+            textBox1.AppendText(LastData);
+        }
+
+        private void sp_DataReceived(object sender, SerialDataReceivedEventArgs e) 
+        {
+            string msg = sp.ReadLine();
+            textBox1.Text += Environment.NewLine;
+            textBox1.AppendText(msg);
+            LastData = msg;
+            sp.Write(LastData);
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+            if (File.Exists(@"data.bin"))
+            {
+                LoadFile();
+            }
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("select * from Win32_SerialPort");
+            ManagementObjectCollection collect = searcher.Get();
+            foreach (ManagementObject manObj in collect)
+            {
+                SerialListBox.Items.Add(manObj["Name"].ToString());
+            }
+            foreach (string list in SerialPort.GetPortNames())
+            {
+                ComName.Add(list);
+            }
+        }
+    }
+}
