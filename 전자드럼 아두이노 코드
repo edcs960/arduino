@@ -1,0 +1,40 @@
+int Piezo = A0;           // 진동감지센서의 위치
+int Piezo2 = A1;
+int Piezo3 = A2;
+int Piezo4 = A3;
+
+void setup() {
+  pinMode(Piezo,INPUT); // LED 핀을 출력으로 설정
+  pinMode(Piezo2,INPUT);
+  pinMode(Piezo3,INPUT);
+  pinMode(Piezo4,INPUT);
+  Serial.begin(9600);     // 9600bps 속도로 시리얼 통신 시작
+}
+ 
+void loop() {
+  int value = analogRead(Piezo);
+  int value2 = analogRead(Piezo2);
+  int value3 = analogRead(Piezo3);
+  int value4 = analogRead(Piezo4);
+  
+  if(value >= 100 && value < 1000) {               // 진동을 감지했을 때
+    Serial.println(value+1000,DEC);        // 시리얼 모니터에 센서의 감지값 출력
+    delay(40);                    // 0.1초 대기 (1000ms = 1s)
+  }
+  if(value2 >= 100 && value2 < 1000) {               // 진동을 감지했을 때
+    Serial.println(value2+2000,DEC);        // 시리얼 모니터에 센서의 감지값 출력
+    delay(40);                    // 0.1초 대기 (1000ms = 1s)
+  }
+  if(value3 >= 100 && value3 < 1000) {               // 진동을 감지했을 때
+    Serial.println(value3+3000,DEC);        // 시리얼 모니터에 센서의 감지값 출력
+    delay(40);                    // 0.1초 대기 (1000ms = 1s)
+  }
+  if(value4 >= 100 && value4 < 1000) {               // 진동을 감지했을 때
+    Serial.println(value4+4000,DEC);        // 시리얼 모니터에 센서의 감지값 출력
+    delay(40);                    // 0.1초 대기 (1000ms = 1s)
+  }
+  value = 0;
+  value2 = 0;
+  value3 = 0;
+  value4 = 0;
+}
