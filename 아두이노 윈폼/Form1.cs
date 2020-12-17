@@ -28,10 +28,10 @@ namespace 아두이노_윈폼
         private void Form1_Load(object sender, EventArgs e)
         {
             PortCombo.DataSource = SerialPort.GetPortNames();
-            kick = new SoundPlayer(@"C:\Users\user\Desktop\TS-VinylPack\TS-VinylPack\Pack 5\kick.wav");
-            hihat = new SoundPlayer(@"C:\Users\user\Desktop\TS-VinylPack\TS-VinylPack\Pack 5\hihat.wav");
-            percussion = new SoundPlayer(@"C:\Users\user\Desktop\TS-VinylPack\TS-VinylPack\Pack 5\percussion3.wav");
-            snare = new SoundPlayer(@"C:\Users\user\Desktop\TS-VinylPack\TS-VinylPack\Pack 5\snare.wav");
+            kick = new SoundPlayer(@"C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\kick.wav");
+            hihat = new SoundPlayer(@"C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\hihat.wav");
+            percussion = new SoundPlayer(@"C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\percussion3.wav");
+            snare = new SoundPlayer(@"C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\snare.wav");
             textbox.Select(textbox.Text.Length, 0);
             textbox.ScrollToCaret();
         }
