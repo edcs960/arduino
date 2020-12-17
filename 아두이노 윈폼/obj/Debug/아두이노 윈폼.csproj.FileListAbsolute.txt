@@ -1,0 +1,10 @@
+C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\bin\Debug\아두이노 윈폼.exe.config
+C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\bin\Debug\아두이노 윈폼.exe
+C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\bin\Debug\아두이노 윈폼.pdb
+C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\obj\Debug\아두이노 윈폼.csprojAssemblyReference.cache
+C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\obj\Debug\아두이노_윈폼.Form1.resources
+C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\obj\Debug\아두이노_윈폼.Properties.Resources.resources
+C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\obj\Debug\아두이노 윈폼.csproj.GenerateResource.cache
+C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\obj\Debug\아두이노 윈폼.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\obj\Debug\아두이노 윈폼.exe
+C:\Users\user\source\repos\아두이노 윈폼\아두이노 윈폼\obj\Debug\아두이노 윈폼.pdb
